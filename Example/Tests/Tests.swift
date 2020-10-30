@@ -1,5 +1,4 @@
 import XCTest
-@testable import YQListViewModel
 
 class Tests: XCTestCase {
     

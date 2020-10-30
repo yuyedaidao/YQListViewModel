@@ -1,0 +1,46 @@
+PODS:
+  - Differentiator (4.0.1)
+  - RxCocoa (5.1.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRelay (5.1.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.1)
+  - YQListViewModel (0.1.0):
+    - RxDataSources
+  - YQRefresh (0.2.2)
+
+DEPENDENCIES:
+  - RxDataSources
+  - YQListViewModel (from `../`)
+  - YQRefresh
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Differentiator
+    - RxCocoa
+    - RxDataSources
+    - RxRelay
+    - RxSwift
+    - YQRefresh
+
+EXTERNAL SOURCES:
+  YQListViewModel:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
+  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  YQListViewModel: 26f4a3b3fff200a64ff563cf18c1e932859f4c8b
+  YQRefresh: 106f2d5a12cd9c2419a1b4b0b93c7a92ed43ddf9
+
+PODFILE CHECKSUM: 4dfda15cf9b6cf3f261f5e5a9ca904fddaa8dba1
+
+COCOAPODS: 1.9.3

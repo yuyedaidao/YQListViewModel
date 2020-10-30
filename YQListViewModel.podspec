@@ -17,26 +17,26 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = '畅媒未来版公共模块-YQListViewModel'
+  s.description      = '基于RxDataSource便捷处理列表数据刷新和加载更多的ViewModel'
 
-  s.homepage         = 'https://github.com/iqilu/YQListViewModel'
+  s.homepage         = 'https://github.com/yuyedaidao/YQListViewModel'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'wyqpadding@gmail.com' => 'wyqpadding@gmail.com' }
-  s.source           = { :git => 'https://github.com/iqilu/YQListViewModel.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/yuyedaidao/YQListViewModel.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
 
   s.source_files = 'YQListViewModel/Classes/**/*'
   
-  s.resource_bundles = {
-    'YQListViewModel' => ['YQListViewModel/Assets/*.png']
-  }
+  #s.resource_bundles = {
+  #  'YQListViewModel' => ['YQListViewModel/Assets/*.png']
+  #}
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'Moya/RxSwift'
   # s.dependency 'SnapKit
-  # s.dependency 'RxDataSources'
+  s.dependency 'RxDataSources'
 end

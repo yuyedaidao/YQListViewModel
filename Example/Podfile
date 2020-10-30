@@ -9,7 +9,8 @@ target 'YQListViewModel_Example' do
 
   #pod 'Moya/RxSwift'
   #pod 'SnapKit'
-  #pod 'RxDataSources'
+  pod 'RxDataSources'
+  pod 'YQRefresh'
 
   target 'YQListViewModel_Tests' do
     inherit! :search_paths
