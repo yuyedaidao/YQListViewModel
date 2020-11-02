@@ -43,7 +43,7 @@ open class ListViewModel<SectionData> {
     
     public var dataFetcher: ListViewModelDataFetcher<SectionData>?
     
-    func loadData(_ action: DataAction = .refresh) {
+    public func loadData(_ action: DataAction = .refresh) {
         DispatchQueue.main.async { [self] in
             let state = _dataState.value
             if action == .refresh {//刷新
