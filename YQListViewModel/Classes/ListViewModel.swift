@@ -108,4 +108,9 @@ open class ListViewModel<SectionData> {
             }
         }
     }
+    
+    public func updateData(_ block: (ListViewModel<SectionData>, [SectionData]) -> [SectionData]) {
+        let data = block(self,  _data.value)
+        _data.accept(data)
+    }
 }
