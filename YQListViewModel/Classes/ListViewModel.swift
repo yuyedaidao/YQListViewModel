@@ -80,25 +80,25 @@ open class ListViewModel<SectionData> {
                         switch result {
                         case .success(let values, let count):
                             if action == .refresh {
+                                self._data.accept(values)
                                 self._dataState.accept(.loaded(nil))
                                 if count < self.page.size {
                                     self._dataState.accept(.noMore)
                                 }
-                                self._data.accept(values)
                             } else {
                                 if count < self.page.size {
-                                    self._dataState.accept(.noMore)
                                     if count > 0 {
                                         self._data.accept(values)
                                     }
+                                    self._dataState.accept(.noMore)
                                 } else {
-                                    self._dataState.accept(.loadedMore(nil))
                                     self._data.accept(values)
+                                    self._dataState.accept(.loadedMore(nil))
                                 }
                             }
                         case .failure(let error):
-                            let state = _dataState.value.next(with: error) ?? .none
                             _dataState.accept(state)
+                            let state = _dataState.value.next(with: error) ?? .none
                         }
                     }
                 })
