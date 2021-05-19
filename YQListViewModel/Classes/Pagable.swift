@@ -36,7 +36,7 @@ public struct Page {
     public let index: Int
     public let size: Int
     
-    public init(index: Int = 0, size: Int = 20, start: Int = 0) {
+    public init(index: Int = 0, size: Int = 1 /*设为1可以允许访问接口时不传size，这样如果接口返回的数据为空时就是没有更多了*/, start: Int = 0) {
         assert(start <= index, "当前页码应该小于起始页码")
         self.index = index
         self.size = size
