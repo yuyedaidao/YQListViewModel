@@ -120,4 +120,8 @@ open class ListViewModel<SectionData> {
         }
         return _data.value[number]
     }
+    
+    var sectionCount: Int {
+        _data.value.count
+    }
 }
