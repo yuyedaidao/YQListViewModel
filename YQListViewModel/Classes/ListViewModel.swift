@@ -113,4 +113,11 @@ open class ListViewModel<SectionData> {
         let data = block(self,  _data.value)
         _data.accept(data)
     }
+    
+    public func section(_ number: Int) -> SectionData? {
+        guard _data.value.count > number else {
+            return nil
+        }
+        return _data.value[number]
+    }
 }
