@@ -27,7 +27,7 @@ public enum FetchResult<Model> {
 
 public typealias ListViewModelDataFetcher<Model> = ([Model], DataAction, Pagable, @escaping((FetchResult<Model>) -> ())) throws -> FetchCancellable
 
-open class ListViewModel<SectionData> {
+open class ListViewModel<SectionData> where SectionData: SectionModelType {
     public let data: Observable<[SectionData]>
     public var page: Pagable = Page()
     public let dataState: Observable<DataState>
@@ -111,6 +111,21 @@ open class ListViewModel<SectionData> {
     
     public func updateData(_ block: (ListViewModel<SectionData>, [SectionData]) -> [SectionData]) {
         let data = block(self,  _data.value)
+        _data.accept(data)
+    }
+    
+    public func updateSection(at index: Int, section: SectionData) {
+        var data = _data.value
+        data[index] = section
+        _data.accept(data)
+    }
+    
+    public func updateItem(at indexPath: IndexPath, item: SectionData.Item) {
+        var data = _data.value
+        let section = data[indexPath.section]
+        var items = section.items
+        items[indexPath[1]] = item
+        data[indexPath.section] = SectionData(original: section, items: items)
         _data.accept(data)
     }
     
