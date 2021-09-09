@@ -139,4 +139,11 @@ open class ListViewModel<SectionData> where SectionData: SectionModelType {
     public var sectionCount: Int {
         _data.value.count
     }
+    
+    var isListDataEmpty: Bool {
+        guard sectionCount > 0 else {
+            return true
+        }
+        return section(0)?.items.isEmpty ?? true
+    }
 }
