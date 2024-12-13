@@ -97,8 +97,8 @@ open class ListViewModel<SectionData> where SectionData: SectionModelType {
                                 }
                             }
                         case .failure(let error):
-                            let state = _dataState.value.next(with: error) ?? .none
-                            _dataState.accept(state)
+                            let state = self._dataState.value.next(with: error) ?? .none
+                            self._dataState.accept(state)
                         }
                     }
                 })
