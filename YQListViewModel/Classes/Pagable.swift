@@ -20,6 +20,8 @@ public protocol Pagable {
     func next() -> Pagable
     func first() -> Pagable
     
+    func convertToParameters(withIndexKey indexKey: String, sizeKey: String) -> [String : Any]
+    
 }
 
 public extension Pagable {

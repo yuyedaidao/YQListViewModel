@@ -10,7 +10,7 @@ PODS:
   - RxRelay (5.1.1):
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
-  - YQListViewModel (0.1.0):
+  - YQListViewModel (0.1.9.1):
     - RxDataSources
   - YQRefresh (0.2.2)
 
@@ -38,9 +38,9 @@ SPEC CHECKSUMS:
   RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
-  YQListViewModel: 26f4a3b3fff200a64ff563cf18c1e932859f4c8b
+  YQListViewModel: d2fcbd0a0841afe53575a9bf8cf6cd454ccad6b8
   YQRefresh: 106f2d5a12cd9c2419a1b4b0b93c7a92ed43ddf9
 
-PODFILE CHECKSUM: 4dfda15cf9b6cf3f261f5e5a9ca904fddaa8dba1
+PODFILE CHECKSUM: 2aa37a28d8604115c7cf6e8bf190bb50c5c5d5d3
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.16.2
