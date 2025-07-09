@@ -25,45 +25,45 @@ public enum FetchResult<Model> {
     case failure(Error?)
 }
 
-public typealias ListViewModelDataFetcher<Model> = ([Model], DataAction, Pagable, @escaping((FetchResult<Model>) -> ())) throws -> FetchCancellable
+public typealias ListViewModelDataFetcher<Model> = ([Model], DataAction, Pagable, @escaping ((FetchResult<Model>) -> Void)) throws -> FetchCancellable
 
 open class ListViewModel<SectionData> where SectionData: SectionModelType {
     public let data: Observable<[SectionData]>
     public var page: Pagable = Page()
     public let dataState: Observable<DataState>
-    
+
     private let _data = BehaviorRelay<[SectionData]>(value: [])
     private let _dataState = BehaviorRelay<DataState>(value: .none)
     private var cancellable: FetchCancellable?
-    
-    required public init() {
+
+    public required init() {
         data = _data.asObservable()
         dataState = _dataState.asObservable()
     }
-    
+
     public var dataFetcher: ListViewModelDataFetcher<SectionData>?
-    
+
     public func loadData(_ action: DataAction = .refresh) {
         DispatchQueue.main.async { [self] in
             let state = _dataState.value
-            if action == .refresh {//刷新
-                //如果此时正在刷新就啥都不做
+            if action == .refresh { // 刷新
+                // 如果此时正在刷新就啥都不做
                 guard state != .loading else {
                     return
                 }
-                //如果此时正在加载更多应该停掉加载更多
+                // 如果此时正在加载更多应该停掉加载更多
                 if state == .loadingMore {
                     _dataState.accept(.loadedMore(nil))
                     cancellable?.cancel()
                 }
                 page = page.first()
                 _dataState.accept(.loading)
-            } else {//加载更多
-                //如果此时正在加载更多什么也不做
+            } else { // 加载更多
+                // 如果此时正在加载更多什么也不做
                 guard state != .loadingMore else {
                     return
                 }
-                //如果此时正在刷新 要停止当前的动作
+                // 如果此时正在刷新 要停止当前的动作
                 guard state != .loading else {
                     _dataState.accept(.loadedMore(nil))
                     _dataState.accept(.loading)
@@ -72,13 +72,13 @@ open class ListViewModel<SectionData> where SectionData: SectionModelType {
                 page = page.next()
                 _dataState.accept(.loadingMore)
             }
-            guard let fetcher = dataFetcher else {fatalError("请先设置dataFetcher")}
+            guard let fetcher = dataFetcher else { fatalError("请先设置dataFetcher") }
             do {
-                cancellable = try fetcher(_data.value, action, page, {[weak self] (result) in
-                    guard let self = self else {return}
+                cancellable = try fetcher(_data.value, action, page, { [weak self] result in
+                    guard let self = self else { return }
                     DispatchQueue.main.async {
                         switch result {
-                        case .success(let values, let count):
+                        case let .success(values, count):
                             if action == .refresh {
                                 self._data.accept(values)
                                 self._dataState.accept(.loaded(nil))
@@ -96,7 +96,7 @@ open class ListViewModel<SectionData> where SectionData: SectionModelType {
                                     self._dataState.accept(.loadedMore(nil))
                                 }
                             }
-                        case .failure(let error):
+                        case let .failure(error):
                             let state = self._dataState.value.next(with: error) ?? .none
                             self._dataState.accept(state)
                         }
@@ -108,18 +108,18 @@ open class ListViewModel<SectionData> where SectionData: SectionModelType {
             }
         }
     }
-    
+
     public func updateData(_ block: (ListViewModel<SectionData>, [SectionData]) -> [SectionData]) {
-        let data = block(self,  _data.value)
+        let data = block(self, _data.value)
         _data.accept(data)
     }
-    
+
     public func updateSection(at index: Int, section: SectionData) {
         var data = _data.value
         data[index] = section
         _data.accept(data)
     }
-    
+
     public func updateItem(at indexPath: IndexPath, item: SectionData.Item) {
         var data = _data.value
         let section = data[indexPath.section]
@@ -128,18 +128,18 @@ open class ListViewModel<SectionData> where SectionData: SectionModelType {
         data[indexPath.section] = SectionData(original: section, items: items)
         _data.accept(data)
     }
-    
+
     public func section(_ number: Int) -> SectionData? {
         guard _data.value.count > number else {
             return nil
         }
         return _data.value[number]
     }
-    
+
     public var sectionCount: Int {
         _data.value.count
     }
-    
+
     public var isListDataEmpty: Bool {
         guard sectionCount > 0 else {
             return true
@@ -153,40 +153,40 @@ open class LazyListViewModel<SectionData> where SectionData: SectionModelType {
 //    public let data: Observable<[SectionData]>
     public var page: Pagable = Page()
     public let dataState: Observable<DataState>
-    
+
 //    private let _data = BehaviorRelay<[SectionData]>(value: [])
     private let _dataState = BehaviorRelay<DataState>(value: .none)
     private var cancellable: FetchCancellable?
     private var sections: [SectionData] = []
-    
-    required public init() {
+
+    public required init() {
 //        data = _data.asObservable()
         dataState = _dataState.asObservable()
     }
-    
+
     public var dataFetcher: ListViewModelDataFetcher<SectionData>?
-    
+
     public func loadData(_ action: DataAction = .refresh) {
         DispatchQueue.main.async { [self] in
             let state = _dataState.value
-            if action == .refresh {//刷新
-                //如果此时正在刷新就啥都不做
+            if action == .refresh { // 刷新
+                // 如果此时正在刷新就啥都不做
                 guard state != .loading else {
                     return
                 }
-                //如果此时正在加载更多应该停掉加载更多
+                // 如果此时正在加载更多应该停掉加载更多
                 if state == .loadingMore {
                     _dataState.accept(.loadedMore(nil))
                     cancellable?.cancel()
                 }
                 page = page.first()
                 _dataState.accept(.loading)
-            } else {//加载更多
-                //如果此时正在加载更多什么也不做
+            } else { // 加载更多
+                // 如果此时正在加载更多什么也不做
                 guard state != .loadingMore else {
                     return
                 }
-                //如果此时正在刷新 要停止当前的动作
+                // 如果此时正在刷新 要停止当前的动作
                 guard state != .loading else {
                     _dataState.accept(.loadedMore(nil))
                     _dataState.accept(.loading)
@@ -195,37 +195,35 @@ open class LazyListViewModel<SectionData> where SectionData: SectionModelType {
                 page = page.next()
                 _dataState.accept(.loadingMore)
             }
-            guard let fetcher = dataFetcher else {fatalError("请先设置dataFetcher")}
+            guard let fetcher = dataFetcher else { fatalError("请先设置dataFetcher") }
             do {
-                cancellable = try fetcher(sections, action, page, {[weak self] (result) in
-                    guard let self = self else {return}
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let values, let count):
-                            if action == .refresh {
-                                self.sections = values
+                cancellable = try fetcher(sections, action, page, { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case let .success(values, count):
+                        if action == .refresh {
+                            self.sections = values
 //                                self._data.accept(values)
-                                self._dataState.accept(.loaded(nil))
-                                if count < self.page.size {
-                                    self._dataState.accept(.noMore)
-                                }
-                            } else {
-                                if count < self.page.size {
-                                    if count > 0 {
-                                        self.sections = values
-//                                        self._data.accept(values)
-                                    }
-                                    self._dataState.accept(.noMore)
-                                } else {
-                                    self.sections = values
-//                                    self._data.accept(values)
-                                    self._dataState.accept(.loadedMore(nil))
-                                }
+                            self._dataState.accept(.loaded(nil))
+                            if count < self.page.size {
+                                self._dataState.accept(.noMore)
                             }
-                        case .failure(let error):
-                            let state = self._dataState.value.next(with: error) ?? .none
-                            self._dataState.accept(state)
+                        } else {
+                            if count < self.page.size {
+                                if count > 0 {
+                                    self.sections = values
+//                                        self._data.accept(values)
+                                }
+                                self._dataState.accept(.noMore)
+                            } else {
+                                self.sections = values
+//                                    self._data.accept(values)
+                                self._dataState.accept(.loadedMore(nil))
+                            }
                         }
+                    case let .failure(error):
+                        let state = self._dataState.value.next(with: error) ?? .none
+                        self._dataState.accept(state)
                     }
                 })
             } catch let error {
@@ -234,56 +232,54 @@ open class LazyListViewModel<SectionData> where SectionData: SectionModelType {
             }
         }
     }
-    
+
     public func updateData(_ block: (LazyListViewModel<SectionData>, [SectionData]) -> [SectionData]) {
-        let data = block(self,  sections)
+        let data = block(self, sections)
         sections = data
 //        _data.accept(data)
     }
-    
+
     public func updateSection(at index: Int, section: SectionData) {
         sections[index] = section
     }
-    
+
     public func updateItem(at indexPath: IndexPath, item: SectionData.Item) {
-        var data = sections
-        let section = data[indexPath.section]
+        let section = sections[indexPath.section]
         var items = section.items
         items[indexPath[1]] = item
         sections[indexPath.section] = SectionData(original: section, items: items)
     }
-    
+
     public func section(_ number: Int) -> SectionData? {
         guard sections.count > number else {
             return nil
         }
         return sections[number]
     }
-    
+
     public var sectionCount: Int {
         sections.count
     }
-    
+
     public var isListDataEmpty: Bool {
         guard sectionCount > 0 else {
             return true
         }
         return section(0)?.items.isEmpty ?? true
     }
-    
+
     public func itemsCount(for section: Int = 0) -> Int {
         guard section < sections.count else {
             return 0
         }
         return sections[section].items.count
     }
-    
+
     public subscript(section: Int) -> SectionData {
         sections[section]
     }
-    
+
     public subscript(indexPath: IndexPath) -> SectionData.Item {
         sections[indexPath.section].items[indexPath.item]
     }
-    
 }
